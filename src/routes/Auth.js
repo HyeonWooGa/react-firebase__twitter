@@ -47,7 +47,6 @@ function Auth() {
     const {
       target: { name },
     } = event;
-    let provider;
 
     switch (name) {
       case "SignIn":
