@@ -9,6 +9,7 @@ function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newAccount, setNewAccount] = useState(true);
+  const [error, setError] = useState("");
   const onChange = (event) => {
     const {
       target: { name, value },
@@ -36,7 +37,17 @@ function Auth() {
       }
       console.log(data);
     } catch (error) {
-      console.log(error);
+      setError(error.message.replace("Firebase: ", ""));
+    }
+  };
+  const isSignIn = (event) => {
+    switch (event.target.value) {
+      case "SignIn":
+        setNewAccount(false);
+        break;
+      case "JoinIn":
+        setNewAccount(true);
+        break;
     }
   };
   return (
@@ -58,12 +69,21 @@ function Auth() {
           value={password}
           onChange={onChange}
         />
-        <input type="submit" value={newAccount ? "Create Account" : "Log In"} />
+        <input type="submit" value={newAccount ? "Join In" : "Sign In"} />
       </form>
+      <div>
+        <button onClick={isSignIn} value="SignIn">
+          Sign In
+        </button>
+        <button onClick={isSignIn} value="JoinIn">
+          Join In
+        </button>
+      </div>
       <div>
         <button>Continue with Google</button>
         <button>Continue with Github</button>
       </div>
+      {error}
     </div>
   );
 }
