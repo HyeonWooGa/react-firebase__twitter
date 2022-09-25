@@ -1,6 +1,9 @@
 import {
   createUserWithEmailAndPassword,
+  GithubAuthProvider,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 import React, { useState } from "react";
 import { authService } from "../fbase";
@@ -41,7 +44,12 @@ function Auth() {
     }
   };
   const isSignIn = (event) => {
-    switch (event.target.value) {
+    const {
+      target: { name },
+    } = event;
+    let provider;
+
+    switch (name) {
       case "SignIn":
         setNewAccount(false);
         break;
@@ -49,6 +57,23 @@ function Auth() {
         setNewAccount(true);
         break;
     }
+  };
+  const onSocialClick = async (event) => {
+    const {
+      target: { name },
+    } = event;
+    let provider;
+
+    switch (name) {
+      case "Google":
+        provider = new GoogleAuthProvider();
+        break;
+      case "Github":
+        provider = new GithubAuthProvider();
+        break;
+    }
+    const data = await signInWithPopup(authService, provider);
+    console.log(data);
   };
   return (
     <div>
@@ -72,16 +97,20 @@ function Auth() {
         <input type="submit" value={newAccount ? "Join In" : "Sign In"} />
       </form>
       <div>
-        <button onClick={isSignIn} value="SignIn">
+        <button onClick={isSignIn} name="SignIn">
           Sign In
         </button>
-        <button onClick={isSignIn} value="JoinIn">
+        <button onClick={isSignIn} name="JoinIn">
           Join In
         </button>
       </div>
       <div>
-        <button>Continue with Google</button>
-        <button>Continue with Github</button>
+        <button onClick={onSocialClick} name="Google">
+          Continue with Google
+        </button>
+        <button onClick={onSocialClick} name="Github">
+          Continue with Github
+        </button>
       </div>
       {error}
     </div>
