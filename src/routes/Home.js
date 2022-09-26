@@ -6,6 +6,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import Tweet from "../components/Tweet";
 import { dbService } from "../fbase";
 
 function Home({ userObj }) {
@@ -58,13 +59,13 @@ function Home({ userObj }) {
         <input type="submit" value="Tweet" />
       </form>
       <div>
-        {tweets.map((tweet) => {
-          return (
-            <div key={tweet.id}>
-              <h4>{tweet.text}</h4>
-            </div>
-          );
-        })}
+        {tweets.map((tweet) => (
+          <Tweet
+            key={tweet.id}
+            tweetObj={tweet}
+            isOwner={tweet.creatorId === userObj.uid}
+          />
+        ))}
       </div>
     </>
   );
