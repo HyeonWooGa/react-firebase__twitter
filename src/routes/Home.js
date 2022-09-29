@@ -12,6 +12,7 @@ import { dbService } from "../fbase";
 function Home({ userObj }) {
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
+  const [attachment, setAttachment] = useState();
 
   useEffect(() => {
     const q = query(
@@ -46,6 +47,21 @@ function Home({ userObj }) {
     } = event;
     setTweet(value);
   };
+  const onFileChange = (event) => {
+    const {
+      target: { files },
+    } = event;
+    const theFile = files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttachment(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+  const onClearAttachment = () => setAttachment(null);
   return (
     <>
       <form onSubmit={onSubmit}>
@@ -56,7 +72,14 @@ function Home({ userObj }) {
           maxLength={120}
           onChange={onChange}
         />
+        <input type="file" accept="image/*" onChange={onFileChange} />
         <input type="submit" value="Tweet" />
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" height="50px" />
+            <button onClick={onClearAttachment}>Cancle Upload</button>
+          </div>
+        )}
       </form>
       <div>
         {tweets.map((tweet) => (
