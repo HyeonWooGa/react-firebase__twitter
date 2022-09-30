@@ -5,7 +5,7 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import { ref, uploadString } from "firebase/storage";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import React, { useEffect, useState } from "react";
 import Tweet from "../components/Tweet";
 import { dbService, storageService } from "../fbase";
@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 function Home({ userObj }) {
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState("");
 
   useEffect(() => {
     const q = query(
@@ -32,19 +32,26 @@ function Home({ userObj }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
-    const response = await uploadString(fileRef, attachment, "data_url");
-    console.log(response);
-    /* try {
-      const docRef = await addDoc(collection(dbService, "tweets"), {
-        text: tweet,
-        createdAt: Date.now(),
-        creatorId: userObj.uid,
-      });
+    let fileUrl = "";
+    if (attachment !== "") {
+      const fileRef = ref(storageService, `${userObj.uid}/${uuidv4()}`);
+      const response = await uploadString(fileRef, attachment, "data_url");
+      fileUrl = await getDownloadURL(fileRef);
+    }
+
+    const tweetObj = {
+      text: tweet,
+      createdAt: Date.now(),
+      creatorId: userObj.uid,
+      attachmentUrl: fileUrl,
+    };
+    try {
+      const docRef = await addDoc(collection(dbService, "tweets"), tweetObj);
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-    setTweet(""); */
+    setTweet("");
+    setAttachment("");
   };
   const onChange = (event) => {
     const {
@@ -66,7 +73,7 @@ function Home({ userObj }) {
     };
     reader.readAsDataURL(theFile);
   };
-  const onClearAttachment = () => setAttachment(null);
+  const onClearAttachment = () => setAttachment("");
   return (
     <>
       <form onSubmit={onSubmit}>
