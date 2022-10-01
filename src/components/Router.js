@@ -5,7 +5,7 @@ import Home from "../routes/Home";
 import Navigation from "./Navigation";
 import Profile from "../routes/Profile";
 
-function AppRouter({ isLoggedIn, userObj }) {
+function AppRouter({ isLoggedIn, userObj, refreshUser }) {
   return (
     <Router>
       {isLoggedIn && <Navigation userObj={userObj} />}
@@ -13,7 +13,10 @@ function AppRouter({ isLoggedIn, userObj }) {
         {isLoggedIn ? (
           <>
             <Route path="/" element={<Home userObj={userObj} />} />
-            <Route path="/profile" element={<Profile userObj={userObj} />} />
+            <Route
+              path="/profile"
+              element={<Profile userObj={userObj} refreshUser={refreshUser} />}
+            />
           </>
         ) : (
           <>
