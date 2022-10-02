@@ -1,62 +1,13 @@
 import {
-  createUserWithEmailAndPassword,
   GithubAuthProvider,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
-import React, { useState } from "react";
+import React from "react";
+import AuthForm from "../components/AuthForm";
 import { authService } from "../fbase";
 
 function Auth() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [newAccount, setNewAccount] = useState(true);
-  const [error, setError] = useState("");
-  const onChange = (event) => {
-    const {
-      target: { name, value },
-    } = event;
-    if (name === "email") {
-      setEmail(value);
-    } else if (name === "password") {
-      setPassword(value);
-    }
-  };
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      let data;
-      if (newAccount) {
-        // create account
-        data = await createUserWithEmailAndPassword(
-          authService,
-          email,
-          password
-        );
-      } else {
-        // log in
-        data = await signInWithEmailAndPassword(authService, email, password);
-      }
-      console.log(data);
-    } catch (error) {
-      setError(error.message.replace("Firebase: ", ""));
-    }
-  };
-  const isSignIn = (event) => {
-    const {
-      target: { name },
-    } = event;
-
-    switch (name) {
-      case "SignIn":
-        setNewAccount(false);
-        break;
-      case "JoinIn":
-        setNewAccount(true);
-        break;
-    }
-  };
   const onSocialClick = async (event) => {
     const {
       target: { name },
@@ -75,34 +26,8 @@ function Auth() {
     console.log(data);
   };
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={onChange}
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          required
-          value={password}
-          onChange={onChange}
-        />
-        <input type="submit" value={newAccount ? "Join In" : "Sign In"} />
-      </form>
-      <div>
-        <button onClick={isSignIn} name="SignIn">
-          Sign In
-        </button>
-        <button onClick={isSignIn} name="JoinIn">
-          Join In
-        </button>
-      </div>
+    <>
+      <AuthForm />
       <div>
         <button onClick={onSocialClick} name="Google">
           Continue with Google
@@ -111,8 +36,7 @@ function Auth() {
           Continue with Github
         </button>
       </div>
-      {error}
-    </div>
+    </>
   );
 }
 
