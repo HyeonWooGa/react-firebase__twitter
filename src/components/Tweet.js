@@ -131,10 +131,10 @@ function Tweet({ tweetObj, isOwner }) {
           {isOwner && (
             <TweetActions>
               <span onClick={toggleEditing}>
-                <FontAwesomeIcon icon={faTrash} />
+                <FontAwesomeIcon icon={faPencilAlt} />
               </span>
               <span onClick={onClickDelete}>
-                <FontAwesomeIcon icon={faPencilAlt} />
+                <FontAwesomeIcon icon={faTrash} />
               </span>
             </TweetActions>
           )}

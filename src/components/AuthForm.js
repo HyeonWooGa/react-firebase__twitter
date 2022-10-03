@@ -52,7 +52,7 @@ const AuthSwitch = styled.span`
 function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [newAccount, setNewAccount] = useState(true);
+  const [newAccount, setNewAccount] = useState(false);
   const [error, setError] = useState("");
   const onChange = (event) => {
     const {
@@ -84,19 +84,11 @@ function AuthForm() {
       setError(error.message.replace("Firebase: ", ""));
     }
   };
-  const isSignIn = (event) => {
-    const {
-      target: { name },
-    } = event;
-
-    switch (name) {
-      case "SignIn":
-        setNewAccount(false);
-        break;
-      case "JoinIn":
-        setNewAccount(true);
-        break;
-    }
+  const onSignIn = () => {
+    setNewAccount(false);
+  };
+  const onJoinIn = () => {
+    setNewAccount(true);
   };
   return (
     <>
@@ -120,12 +112,11 @@ function AuthForm() {
         <AuthSubmit type="submit" value={newAccount ? "Join In" : "Sign In"} />
       </Container>
       <div>
-        <AuthSwitch onClick={isSignIn} name="SignIn">
-          Sign In
-        </AuthSwitch>
-        <AuthSwitch onClick={isSignIn} name="JoinIn">
-          Join In
-        </AuthSwitch>
+        {newAccount ? (
+          <AuthSwitch onClick={onSignIn}>Sign In</AuthSwitch>
+        ) : (
+          <AuthSwitch onClick={onJoinIn}>Join In</AuthSwitch>
+        )}
       </div>
       {error && <AuthError>{error}</AuthError>}
     </>
