@@ -55,13 +55,25 @@ const FormBtn = styled.input`
   cursor: pointer;
   margin-top: 15px;
   margin-bottom: 5px;
+  text-align: center;
+  background-color: #04aaff;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
 `;
 
 const CancelBtn = styled.span`
   cursor: pointer;
-  margin-top: 15px;
   margin-bottom: 5px;
   background-color: tomato;
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
 `;
 
 const TweetActions = styled.div`
