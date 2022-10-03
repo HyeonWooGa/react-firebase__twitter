@@ -1,10 +1,9 @@
 import { updateProfile } from "firebase/auth";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "../components/Footer";
-import { authService, dbService } from "../fbase";
+import { authService } from "../fbase";
 
 const Container = styled.div`
   width: 100%;
@@ -54,22 +53,6 @@ function Profile({ userObj, refreshUser }) {
     authService.signOut();
     navigate("/");
   };
-
-  const getMyTweets = async () => {
-    const q = query(
-      collection(dbService, "tweets"),
-      where("creatorId", "==", `${userObj.uid}`),
-      orderBy("createdAt", "desc")
-    );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, "=>", doc.data());
-    });
-  };
-
-  useEffect(() => {
-    getMyTweets();
-  }, []);
 
   const onSubmit = async (event) => {
     event.preventDefault();

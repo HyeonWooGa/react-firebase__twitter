@@ -58,7 +58,6 @@ function Auth() {
         break;
     }
     const data = await signInWithPopup(authService, provider);
-    console.log(data);
   };
   return (
     <>
