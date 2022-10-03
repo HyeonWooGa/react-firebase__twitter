@@ -1,10 +1,11 @@
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Tweet from "../components/Tweet";
-import { dbService } from "../fbase";
+import { authService, dbService } from "../fbase";
 import TweetFactory from "../components/TweetFactory";
 import styled from "styled-components";
 import Footer from "../components/Footer";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Container = styled.div`
   width: 100%;
@@ -21,12 +22,18 @@ function Home({ userObj }) {
       collection(dbService, "tweets"),
       orderBy("createdAt", "desc")
     );
-    onSnapshot(q, (snapshot) => {
+    const unSubscribe = onSnapshot(q, (snapshot) => {
       const tweetArray = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setTweets(tweetArray);
+    });
+
+    onAuthStateChanged(authService, (user) => {
+      if (user === null) {
+        unSubscribe();
+      }
     });
   }, []);
 
