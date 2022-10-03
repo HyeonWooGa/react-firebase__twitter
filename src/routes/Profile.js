@@ -2,7 +2,50 @@ import { updateProfile } from "firebase/auth";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Footer from "../components/Footer";
 import { authService, dbService } from "../fbase";
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ProfileForm = styled.form`
+  border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+  padding-bottom: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const FormInput = styled.input`
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid black;
+  text-align: center;
+  background-color: white;
+  color: black;
+`;
+
+const FormBtn = styled.input`
+  cursor: pointer;
+  width: 100%;
+  padding: 7px 20px;
+  text-align: center;
+  color: white;
+  border-radius: 20px;
+  background-color: #04aaff;
+`;
+
+const LogOutBtn = styled(FormBtn)`
+  cursor: pointer;
+  background-color: tomato;
+  margin-top: 50px;
+`;
 
 function Profile({ userObj, refreshUser }) {
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
@@ -46,18 +89,24 @@ function Profile({ userObj, refreshUser }) {
   };
 
   return (
-    <>
-      <form onSubmit={onSubmit}>
-        <input
+    <Container>
+      <ProfileForm onSubmit={onSubmit}>
+        <FormInput
           type="text"
           placeholder="Display name"
           value={newDisplayName}
           onChange={onChange}
+          autoFocus
         />
-        <input type="submit" value="Update Profile" />
-      </form>
-      <button onClick={onLogOutClick}>Log Out</button>
-    </>
+        <FormBtn
+          type="submit"
+          value="Update Profile"
+          style={{ marginTop: 10 }}
+        />
+      </ProfileForm>
+      <LogOutBtn type="submit" value="Log Out" onClick={onLogOutClick} />
+      <Footer />
+    </Container>
   );
 }
 

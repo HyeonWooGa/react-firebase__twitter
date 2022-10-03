@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import { authService } from "../fbase";
 import AppRouter from "./Router";
+
+const Container = styled.div`
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+`;
 
 function App() {
   const [init, setInit] = useState(false);
@@ -41,7 +49,6 @@ function App() {
       ) : (
         "Initializing..."
       )}
-      <footer>&copy; {new Date().getFullYear()} Twitter Clone - 박연우</footer>
     </>
   );
 }
