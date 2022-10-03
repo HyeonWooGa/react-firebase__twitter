@@ -17,7 +17,7 @@ const Container = styled.div`
 
 function AppRouter({ isLoggedIn, userObj, refreshUser }) {
   return (
-    <Router>
+    <Router basename="/react-firebase__twitter">
       {isLoggedIn && <Navigation userObj={userObj} />}
       <Container>
         <Routes>
